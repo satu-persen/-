@@ -68,7 +68,7 @@
 </head>
 <body>
 
-  <h1>Snake Game & Leaderboard</h1>
+  <h1>Snake Game</h1>
 
   <div class="form-container" id="registrationForm">
     <h2>Create Your Card</h2>
@@ -95,30 +95,9 @@
     <ul id="leaderboardList"></ul>
   </div>
 
-  <script type="module">
-    // Import Firebase libraries
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyC8c1o-_jmq2cPkYAkOnFZm8LN3WamMcqY",
-      authDomain: "server-8a328.firebaseapp.com",
-      databaseURL: "https://server-8a328-default-rtdb.firebaseio.com",
-      projectId: "server-8a328",
-      storageBucket: "server-8a328.appspot.com",
-      messagingSenderId: "201108495696",
-      appId: "1:201108495696:web:676a9d5aa09a630b85a055",
-      measurementId: "G-03CF3E2DWD"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
+  <script>
+    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
     let gameInterval = null;
-    let canvas, ctx;
-    let snake, food, direction, score;
 
     // Fungsi untuk mendaftarkan pengguna
     function registerUser() {
@@ -127,16 +106,9 @@
         alert('Please enter your name!');
         return;
       }
-
-      // Simpan nama pengguna ke Firebase
-      const userRef = ref(db, 'users/' + username);
-      set(userRef, { username }).then(() => {
-        alert(`Welcome, ${username}! You can now play the game.`);
-        showGame();
-        startGame(); // Memulai game saat pengguna terdaftar
-      }).catch(error => {
-        console.error("Error saving user:", error);
-      });
+      localStorage.setItem('activeUser', username);
+      alert(`Welcome, ${username}! You can now play the game.`);
+      showGame();
     }
 
     function showGame() {
@@ -145,8 +117,13 @@
     }
 
     window.onload = function() {
-      fetchLeaderboard(); // Mengambil leaderboard saat halaman dimuat
+      const activeUser = localStorage.getItem('activeUser');
+      if (activeUser) showGame();
+      updateLeaderboard();
     };
+
+    let canvas, ctx;
+    let snake, food, direction, score;
 
     function startGame() {
       canvas = document.getElementById('gameCanvas');
@@ -157,7 +134,7 @@
       placeFood();
 
       if (gameInterval) clearInterval(gameInterval);
-      gameInterval = setInterval(updateGame, 200); // Kecepatan stabil
+      gameInterval = setInterval(updateGame, 200); // Ular lebih lambat
     }
 
     function updateGame() {
@@ -171,10 +148,13 @@
         snake.pop();
       }
 
-      if (head.x < 0 || head.y < 0 || head.x >= 30 || head.y >= 30 || 
-          snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
-        gameOver();
-        return;
+      if (head.x < 0 || head.y < 0 || head.x >= 30 || head.y >= 30) {
+        if (snake.length > 1) {
+          snake.pop();
+        } else {
+          gameOver();
+          return;
+        }
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -200,10 +180,14 @@
 
     function gameOver() {
       clearInterval(gameInterval);
-      const activeUser = document.getElementById('username').value.trim();
+      const activeUser = localStorage.getItem('activeUser');
       alert(`Game Over! Your score: ${score}`);
 
-      saveScore(activeUser, score);
+      leaderboard.push({ username: activeUser, score });
+      leaderboard.sort((a, b) => b.score - a.score);
+      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+      updateLeaderboard();
+
       document.getElementById('retryButton').style.display = 'block';
     }
 
@@ -212,31 +196,9 @@
       startGame();
     }
 
-    function saveScore(username, score) {
-      const leaderboardRef = ref(db, 'leaderboard/' + username);
-      set(leaderboardRef, { score }).then(() => {
-        fetchLeaderboard(); // Update leaderboard setelah menyimpan skor
-      }).catch(error => {
-        console.error("Error saving score:", error);
-      });
-    }
-
-    function fetchLeaderboard() {
-      const leaderboardRef = ref(db, 'leaderboard');
-      onValue(leaderboardRef, (snapshot) => {
-        const leaderboard = [];
-        snapshot.forEach(childSnapshot => {
-          const data = childSnapshot.val();
-          leaderboard.push({ username: childSnapshot.key, score: data.score });
-        });
-        updateLeaderboard(leaderboard);
-      });
-    }
-
-    function updateLeaderboard(leaderboard) {
-           const leaderboardList = document.getElementById('leaderboardList');
+    function updateLeaderboard() {
+      const leaderboardList = document.getElementById('leaderboardList');
       leaderboardList.innerHTML = '';
-      leaderboard.sort((a, b) => b.score - a.score); // Urutkan berdasarkan skor tertinggi
       leaderboard.forEach(({ username, score }) => {
         const li = document.createElement('li');
         li.textContent = `${username}: ${score} points`;
@@ -247,4 +209,3 @@
 
 </body>
 </html>
-
