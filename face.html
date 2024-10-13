@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snake Game & Leaderboard</title>
+  <title>Snake Game</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -90,6 +90,8 @@
     <button id="retryButton" onclick="retryGame()">Retry</button>
   </div>
 
+  <button id="startButton" style="display:none;" onclick="startGame()">Start Game</button>
+
   <div class="leaderboard">
     <h2>Score</h2>
     <ul id="leaderboardList"></ul>
@@ -107,25 +109,16 @@
         return;
       }
       localStorage.setItem('activeUser', username);
-      alert(`Welcome, ${username}! You can now play the game.`);
-      showGame();
-    }
-
-    function showGame() {
+      alert(`Welcome, ${username}! Click Start to play.`);
+      document.getElementById('startButton').style.display = 'block'; // Tampilkan tombol Start
       document.getElementById('registrationForm').style.display = 'none';
-      document.getElementById('gameContainer').style.display = 'block';
     }
-
-    window.onload = function() {
-      const activeUser = localStorage.getItem('activeUser');
-      if (activeUser) showGame();
-      updateLeaderboard();
-    };
-
-    let canvas, ctx;
-    let snake, food, direction, score;
 
     function startGame() {
+      document.getElementById('startButton').style.display = 'none'; // Sembunyikan tombol Start
+      document.getElementById('gameContainer').style.display = 'block';
+      
+      // Memulai permainan
       canvas = document.getElementById('gameCanvas');
       ctx = canvas.getContext('2d');
       snake = [{ x: 10, y: 10 }];
@@ -136,6 +129,17 @@
       if (gameInterval) clearInterval(gameInterval);
       gameInterval = setInterval(updateGame, 200); // Ular lebih lambat
     }
+
+    window.onload = function() {
+      const activeUser = localStorage.getItem('activeUser');
+      if (activeUser) {
+        document.getElementById('startButton').style.display = 'block'; // Tampilkan tombol Start jika ada pengguna aktif
+      }
+      updateLeaderboard();
+    };
+
+    let canvas, ctx;
+    let snake, food, direction, score;
 
     function updateGame() {
       const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
