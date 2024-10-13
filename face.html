@@ -77,23 +77,23 @@
   </div>
 
   <div class="game-container" id="gameContainer" style="display:none;">
-    <h2>Snake Game</h2>
+    <h2>Snake Game🐍</h2>
     <canvas id="gameCanvas" width="300" height="300"></canvas>
 
     <div class="controls">
-      <button onclick="changeDirection('up')">Up</button><br>
-      <button onclick="changeDirection('left')">Left</button>
-      <button onclick="changeDirection('right')">Right</button><br>
-      <button onclick="changeDirection('down')">Down</button>
+      <button onclick="changeDirection('⬆️')">Up</button><br>
+      <button onclick="changeDirection('⬅️')">Left</button>
+      <button onclick="changeDirection('➡️')">Right</button><br>
+      <button onclick="changeDirection('⬇️')">Down</button>
     </div>
 
-    <button id="retryButton" onclick="retryGame()">Retry</button>
+    <button id="retryButton" onclick="retryGame()">🔃</button>
   </div>
 
-  <button id="startButton" style="display:none;" onclick="startGame()">Start Game</button>
+  <button id="startButton" style="display:none;" onclick="startGame()">START GAME😎</button>
 
   <div class="leaderboard">
-    <h2>Score</h2>
+    <h2>Score📋</h2>
     <ul id="leaderboardList"></ul>
   </div>
 
@@ -109,7 +109,7 @@
         return;
       }
       localStorage.setItem('activeUser', username);
-      alert(`Welcome, ${username}! Click Start to play.`);
+      alert(`Welcome, ${username}! Click Start to play.▶️`);
       document.getElementById('startButton').style.display = 'block'; // Tampilkan tombol Start
       document.getElementById('registrationForm').style.display = 'none';
     }
@@ -210,6 +210,8 @@
       });
     }
   </script>
-
+<small>dika🇵🇸🤓</small>
+  <p>terimakasih untuk ChatGPT telah membantu</p>
+  <p>terimakasih untuk semuanya!🥰</p>
 </body>
 </html>
