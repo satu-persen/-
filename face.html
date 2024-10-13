@@ -234,3 +234,17 @@
     }
 
     function updateLeaderboard(leaderboard) {
+           const leaderboardList = document.getElementById('leaderboardList');
+      leaderboardList.innerHTML = '';
+      leaderboard.sort((a, b) => b.score - a.score); // Urutkan berdasarkan skor tertinggi
+      leaderboard.forEach(({ username, score }) => {
+        const li = document.createElement('li');
+        li.textContent = `${username}: ${score} points`;
+        leaderboardList.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>
+
