@@ -98,7 +98,7 @@
   <script type="module">
     // Import Firebase libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -127,6 +127,7 @@
         alert('Please enter your name!');
         return;
       }
+
       // Simpan nama pengguna ke Firebase
       const userRef = ref(db, 'users/' + username);
       set(userRef, { username }).then(() => {
@@ -233,16 +234,3 @@
     }
 
     function updateLeaderboard(leaderboard) {
-      const leaderboardList = document.getElementById('leaderboardList');
-      leaderboardList.innerHTML = '';
-      leaderboard.sort((a, b) => b.score - a.score); // Urutkan berdasarkan skor tertinggi
-      leaderboard.forEach(({ username, score }) => {
-        const li = document.createElement('li');
-        li.textContent = `${username}: ${score} points`;
-        leaderboardList.appendChild(li);
-      });
-    }
-  </script>
-
-</body>
-</html>
