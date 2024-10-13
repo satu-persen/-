@@ -204,20 +204,32 @@
         y: Math.floor(Math.random() * 30)
       };
     }
-
+    
     function gameOver() {
-      clearInterval(gameInterval);
-      const activeUser = localStorage.getItem('activeUser');
-      alert(`Game Over! Your score: ${score}`);
+  clearInterval(gameInterval);
+  const activeUser = localStorage.getItem('activeUser');
+  alert(`Game Over! Your score: ${score}`);
 
-      leaderboard.push({ username: activeUser, score });
-      leaderboard.sort((a, b) => b.score - a.score);
-      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-      updateLeaderboard();
+  // Cek apakah sudah ada skor sebelumnya untuk pengguna ini
+  const existingScore = leaderboard.find(entry => entry.username === activeUser);
 
-      document.getElementById('retryButton').style.display = 'block';
+  if (!existingScore || score > existingScore.score) {
+    // Jika skor baru lebih tinggi atau belum ada skor, simpan
+    if (existingScore) {
+      // Hapus skor lama
+      leaderboard = leaderboard.filter(entry => entry.username !== activeUser);
     }
 
+    // Tambahkan skor baru ke leaderboard
+    leaderboard.push({ username: activeUser, score });
+    leaderboard.sort((a, b) => b.score - a.score); // Urutkan dari skor tertinggi
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+  }
+
+  updateLeaderboard();
+  document.getElementById('retryButton').style.display = 'block';
+}
+    
     function retryGame() {
       document.getElementById('retryButton').style.display = 'none';
       startGame();
