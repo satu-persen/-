@@ -3314,41 +3314,5 @@
   </script>
       <div id="thankYouMessage">terimakasih untuk ChatGPT telah membantu terimakasih untuk semuanya! - andika 🇵🇸🤓</div>
       <div id="copy">Snake Game - dika - 13 • Oct • 2024 › </div>
-        
-  <script>
-  // Fungsi untuk mencatat pengunjung unik
-  function hitungPengunjung() {
-    const userAgent = navigator.userAgent; // Mendapatkan User-Agent
-    const lastVisit = localStorage.getItem('lastUserAgent'); // Cek User-Agent sebelumnya
-
-    // Jika User-Agent baru, simpan dan tambahkan hitungan pengunjung
-    if (lastVisit !== userAgent) {
-      localStorage.setItem('lastUserAgent', userAgent); // Simpan User-Agent baru
-      tambahPengunjung(); // Panggil fungsi untuk menambah pengunjung
-    }
-  }
-
-  // Fungsi menambah pengunjung (simulasi)
-  function tambahPengunjung() {
-    let totalPengunjung = parseInt(localStorage.getItem('totalPengunjung')) || 0;
-    totalPengunjung++;
-    localStorage.setItem('totalPengunjung', totalPengunjung);
-    console.log('Total Pengunjung:', totalPengunjung); // Debugging
-    tampilkanPengunjung(totalPengunjung); // Update UI
-  }
-
-  // Fungsi menampilkan total pengunjung di UI
-  function tampilkanPengunjung(total) {
-    const pengunjungEl = document.getElementById('pengunjungCount');
-    if (pengunjungEl) pengunjungEl.textContent = `Total Pengunjung: ${total}`;
-  }
-
-  // Panggil fungsi saat halaman dimuat
-  document.addEventListener('DOMContentLoaded', hitungPengunjung);
-</script>
-
-<div id="pengunjungCount" style="margin-top: 15px; font-size: 10px;">
-    Pengunjung: 0
-</div>
 </body>
 </html>
